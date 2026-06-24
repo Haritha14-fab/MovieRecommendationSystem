@@ -1,0 +1,19 @@
+#suggestions {
+    top: calc(100% + 4px);
+}
+
+#movieSearchForm .input-group {
+    gap: 0;
+}
+
+@media (max-width: 768px) {
+    #movieSearchForm .input-group {
+        flex-wrap: wrap;
+    }
+
+    #movieSearchForm .form-control,
+    #movieSearchForm .btn {
+        width: 100%;
+        border-radius: 8px !important;
+    }
+}

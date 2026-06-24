@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Movie Recommendation System{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="text-center mb-4">
+    <h1 class="h2 mb-3">Find Your Next Movie</h1>
+    <p class="text-muted">Search the MovieLens catalog and get hybrid Python + R recommendations.</p>
+</section>
+
+<section class="row justify-content-center mb-5">
+    <div class="col-lg-8">
+        <form id="movieSearchForm" action="{{ url_for('pages.search_page') }}" method="GET" class="position-relative">
+            <div class="input-group input-group-lg">
+                <input type="text" id="movieInput" name="title" class="form-control"
+                       placeholder="Try Toy Story, Avatar, Interstellar..." autocomplete="off" required>
+                <button id="searchBtn" class="btn btn-primary" type="submit">Search</button>
+                <button id="recommendBtn" class="btn btn-success" type="button">Recommendations</button>
+            </div>
+            <div id="suggestions" class="list-group suggestion-list"></div>
+        </form>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h2 class="h4 mb-3">Trending Movies</h2>
+    <div class="row">
+        {% for movie in trending_movies %}
+            {% with movie=movie %}
+                {% include "partials/movie_card.html" %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2 class="h4 mb-3">Browse Catalog</h2>
+    <div class="row" id="movieContainer">
+        {% for movie in movies %}
+            {% with movie=movie %}
+                {% include "partials/movie_card.html" %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

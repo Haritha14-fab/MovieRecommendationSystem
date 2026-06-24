@@ -1,0 +1,22 @@
+library(reticulate)
+
+# Force correct Python path
+use_python(
+  "C:/Users/ALEKYA/AppData/Local/Programs/Python/Python312/python.exe",
+  required = TRUE
+)
+
+# Verify configuration
+py_config()
+
+# Import required libraries
+pd <- import("pandas")
+np <- import("numpy")
+sklearn <- import("sklearn")
+surprise <- import("surprise")
+
+cat("Python Integration Successful\n")
+cat("Pandas Loaded\n")
+cat("NumPy Loaded\n")
+cat("Scikit-learn Loaded\n")
+cat("Surprise Loaded\n")

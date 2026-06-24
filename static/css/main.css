@@ -1,0 +1,86 @@
+body {
+    background-color: #f5f7fb;
+    color: #1f2937;
+}
+
+.suggestion-list {
+    position: absolute;
+    width: 100%;
+    z-index: 1050;
+    max-height: 320px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.suggestion-poster {
+    width: 36px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: #e5e7eb;
+}
+
+.suggestion-title {
+    font-size: 0.95rem;
+}
+
+.movie-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.poster-wrap {
+    position: relative;
+    background: #111827;
+    min-height: 280px;
+}
+
+.poster-wrap-lg {
+    min-height: 420px;
+}
+
+.movie-poster,
+.movie-poster-detail {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+}
+
+.movie-poster-detail {
+    height: auto;
+    min-height: 420px;
+}
+
+.poster-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .movie-poster {
+        height: 360px;
+    }
+}

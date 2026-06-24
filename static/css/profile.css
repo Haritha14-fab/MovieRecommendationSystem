@@ -1,0 +1,35 @@
+body.bg-dark {
+    background: #0b1220 !important;
+}
+
+.profile-card {
+    background: #1f2937;
+    border: 1px solid #334155;
+    color: #f8fafc;
+}
+
+.profile-avatar {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+}
+
+.profile-card .text-muted {
+    color: #cbd5e1 !important;
+}
+
+.profile-card .movie-card {
+    background: #111827;
+    color: #f8fafc;
+}
+
+.profile-card .btn-primary {
+    border: none;
+}

@@ -1,0 +1,32 @@
+library(reticulate)
+
+# Automatically detect Python
+
+py_config()
+
+# Import required libraries
+
+pd <- import("pandas")
+np <- import("numpy")
+sklearn <- import("sklearn")
+surprise <- import("surprise")
+
+cat("Python Loaded Successfully\n")
+cat("Pandas Loaded Successfully\n")
+cat("NumPy Loaded Successfully\n")
+cat("Scikit-learn Loaded Successfully\n")
+cat("Surprise Library Loaded Successfully\n")
+
+if (file.exists("Python/pandas_numpy_demo.py")) {
+  source_python("Python/pandas_numpy_demo.py")
+}
+
+if (file.exists("Python/sklearn_metrics.py")) {
+  source_python("Python/sklearn_metrics.py")
+}
+
+if (file.exists("Python/surprise_model.py")) {
+  source_python("Python/surprise_model.py")
+}
+
+cat("Python Integration Completed Successfully\n")

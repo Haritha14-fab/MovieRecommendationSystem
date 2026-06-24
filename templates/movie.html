@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | Movie Details{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="poster-wrap poster-wrap-lg">
+            <img src="{{ placeholder_poster }}" data-src="{{ poster }}"
+                 id="mainPoster" class="img-fluid rounded shadow lazy-poster movie-poster-detail"
+                 alt="{{ title }}" loading="lazy">
+            <div class="poster-spinner spinner-border text-primary" role="status"></div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h1 class="h2">{{ title }}</h1>
+        <p class="mb-1"><strong>IMDb Rating:</strong> {{ details.get('imdbRating', 'N/A') }}</p>
+        <p class="mb-1"><strong>Genre:</strong> {{ details.get('Genre', 'N/A') }}</p>
+        <p class="mb-1"><strong>Director:</strong> {{ details.get('Director', 'N/A') }}</p>
+        <p class="mb-3"><strong>Cast:</strong> {{ details.get('Actors', 'N/A') }}</p>
+        <p class="text-muted">{{ details.get('Plot', 'No description available.') }}</p>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ watch }}" target="_blank" rel="noopener" class="btn btn-success">Watch Online</a>
+            <a href="{{ trailer }}" target="_blank" rel="noopener" class="btn btn-outline-danger">Trailer</a>
+            <a href="{{ url_for('pages.home') }}" class="btn btn-secondary">Back Home</a>
+        </div>
+    </div>
+</div>
+
+<hr class="my-4">
+
+<section>
+    <h2 class="h4 mb-3">Similar Movies</h2>
+    <div class="row">
+        {% for movie in recommendations %}
+            {% with movie=movie %}
+                {% include "partials/movie_card.html" %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/movie.js') }}"></script>
+{% endblock %}

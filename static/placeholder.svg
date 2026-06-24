@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="750" viewBox="0 0 500 750">
+  <rect width="100%" height="100%" fill="#0b1a2b" rx="12"/>
+  <g fill="#9aa6b2" font-family="Arial, sans-serif" font-size="20" text-anchor="middle">
+    <text x="50%" y="45%">No Poster</text>
+    <text x="50%" y="52%">Available</text>
+  </g>
+</svg>

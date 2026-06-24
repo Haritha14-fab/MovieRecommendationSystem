@@ -1,0 +1,13 @@
+.movie-card .card-body {
+    padding: 1rem;
+}
+
+.movie-poster-detail {
+    max-height: 560px;
+}
+
+@media (max-width: 768px) {
+    .d-flex.flex-wrap.gap-2 .btn {
+        width: 100%;
+    }
+}

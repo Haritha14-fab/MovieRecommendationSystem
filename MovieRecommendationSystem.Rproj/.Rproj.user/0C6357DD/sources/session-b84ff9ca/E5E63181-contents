@@ -1,0 +1,49 @@
+from flask import Flask, request, jsonify
+import pandas as pd
+
+app = Flask(__name__)
+
+data = pd.read_csv(
+    "C:/Users/ALEKYA/OneDrive/Desktop/MovieRecommendationSystem/Output/recommendations.csv"
+)
+
+# =========================
+# HOME PAGE (ONLY UI TEXT)
+# =========================
+@app.route('/')
+def home():
+    return """
+    <h2>🎬 Movie Recommendation System API</h2>
+    <p>Use: /recommend?user_id=1</p>
+    """
+
+# =========================
+# API ENDPOINT (REAL LOGIC)
+# =========================
+@app.route('/recommend', methods=['GET'])
+def recommend():
+
+    user_id = request.args.get('user_id')
+
+    if user_id is None:
+        return jsonify({"error": "user_id required"})
+
+    # Convert safely
+    user_id = int(user_id)
+
+    # 🔥 THIS IS WHERE YOUR SORT LOGIC GOES
+    result = data.sort_values(
+        "Predicted_Rating",
+        ascending=False
+    ).head(10)
+
+    return jsonify({
+        "user_id": user_id,
+        "top_10_recommendations": result.to_dict(orient="records")
+    })
+
+# =========================
+# RUN APP
+# =========================
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,0 +1,236 @@
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Simple Netflix-style movie recommender UI">
+<link rel="preconnect" href="https://picsum.photos">
+
+<title>Movie AI System</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #0b0f19;
+    color: white;
+}
+
+/* HEADER */
+.header {
+    text-align: center;
+    padding: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #38bdf8;
+}
+
+/* INPUT AREA */
+.container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 12px;
+    width: 200px;
+    border-radius: 10px;
+    border: none;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    background: #38bdf8;
+    color: black;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.button[disabled] {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.loading {
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* MOVIE GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* MOVIE CARD (NETFLIX STYLE) */
+.card {
+    background: #1e293b;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* POSTER IMAGE */
+.poster {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* TEXT */
+.info {
+    padding: 10px;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.rating {
+    color: gold;
+    margin-top: 5px;
+}
+
+/* MOBILE */
+@media(max-width: 600px){
+    .header { font-size: 20px; }
+}
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">🎬 Netflix Style Movie AI System</div>
+
+<header class="container">
+    <form id="user-form" aria-label="Get movie recommendations">
+        <input type="number" id="user_id" name="user_id" placeholder="Enter User ID" min="0" inputmode="numeric" required>
+        <button class="button" type="submit">Recommend</button>
+    </form>
+</header>
+
+<div class="grid" id="results"></div>
+
+
+<script>
+(() => {
+    const results = document.getElementById('results');
+    const form = document.getElementById('user-form');
+    const userInput = document.getElementById('user_id');
+    const endpointBase = 'http://127.0.0.1:5000/recommend';
+
+    const getPoster = id => `https://picsum.photos/200/300?random=${id}`;
+
+    function clearResults() {
+        results.textContent = '';
+    }
+
+    function showMessage(text) {
+        clearResults();
+        const el = document.createElement('div');
+        el.className = 'loading';
+        el.textContent = text;
+        results.appendChild(el);
+    }
+
+    async function fetchWithTimeout(url, timeout = 8000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        try {
+            const res = await fetch(url, { signal: controller.signal });
+            clearTimeout(id);
+            return res;
+        } catch (err) {
+            clearTimeout(id);
+            throw err;
+        }
+    }
+
+    function buildCard(movie, index) {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const img = document.createElement('img');
+        img.className = 'poster';
+        img.src = getPoster(movie.movieId || index);
+        img.alt = movie.Movie_Title || movie.title || 'Movie poster';
+        img.loading = 'lazy';
+        img.width = 200;
+        img.height = 300;
+
+        const info = document.createElement('div');
+        info.className = 'info';
+
+        const title = document.createElement('div');
+        title.className = 'title';
+        title.textContent = (movie.Movie_Title || movie.title || 'Movie');
+
+        const rating = document.createElement('div');
+        rating.className = 'rating';
+        rating.textContent = `⭐ ${movie.Predicted_Rating ?? '—'}`;
+
+        info.appendChild(title);
+        info.appendChild(rating);
+
+        card.appendChild(img);
+        card.appendChild(info);
+
+        return card;
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button');
+        const userId = userInput.value.trim();
+        if (!userId) {
+            userInput.focus();
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Loading...';
+        showMessage('Fetching recommendations…');
+
+        try {
+            const url = `${endpointBase}?user_id=${encodeURIComponent(userId)}`;
+            const res = await fetchWithTimeout(url, 8000);
+            if (!res.ok) throw new Error('Network response was not ok');
+            const data = await res.json();
+
+            clearResults();
+            const frag = document.createDocumentFragment();
+            (data.recommendations || []).forEach((movie, i) => {
+                frag.appendChild(buildCard(movie, i));
+            });
+
+            if (!frag.childNodes.length) showMessage('No recommendations found');
+            else results.appendChild(frag);
+
+        } catch (err) {
+            console.error(err);
+            showMessage('Could not reach backend. Is it running?');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Recommend';
+        }
+    });
+
+})();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+from flask import Flask, request, jsonify
+import pandas as pd
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+# =========================
+# LOAD DATA
+# =========================
+data = pd.read_csv(
+    "C:/Users/ALEKYA/OneDrive/Desktop/MovieRecommendationSystem/Output/recommendations.csv"
+)
+
+# =========================
+# HOME PAGE
+# =========================
+@app.route('/')
+def home():
+    return """
+    <h2>🎬 Movie Recommendation System API</h2>
+    <p>Use: /recommend?user_id=1</p>
+    """
+
+# =========================
+# RECOMMENDATION API
+# =========================
+@app.route('/recommend', methods=['GET'])
+def recommend():
+
+    user_id = request.args.get('user_id')
+
+    if not user_id:
+        return jsonify({
+            "error": "user_id is required"
+        }), 400
+
+    try:
+        user_id = int(user_id)
+    except:
+        return jsonify({
+            "error": "user_id must be a number"
+        }), 400
+
+    # =========================
+    # SORTING LOGIC
+    # =========================
+    result = data.sort_values(
+        "Predicted_Rating",
+        ascending=False
+    ).head(10)
+
+    # =========================
+    # CLEAN RESPONSE FORMAT
+    # =========================
+    recommendations = result.to_dict(orient="records")
+
+    return jsonify({
+        "user_id": user_id,
+        "recommendations": recommendations
+    })
+
+# =========================
+# RUN SERVER
+# =========================
+if __name__ == '__main__':
+    app.run(debug=True)

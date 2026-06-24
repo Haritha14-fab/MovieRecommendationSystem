@@ -1,0 +1,18 @@
+from surprise import Dataset
+from surprise import Reader
+from surprise import SVD
+
+reader = Reader(
+    rating_scale=(1,5)
+)
+
+data = Dataset.load_builtin(
+    "ml-100k"
+)
+
+algo = SVD()
+
+print(
+    "Surprise SVD model loaded successfully."
+)
+

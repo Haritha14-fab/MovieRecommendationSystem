@@ -1,0 +1,7 @@
+# Auto project root (NO PATH ISSUES)
+setwd("C:/Users/ALEKYA/OneDrive/Desktop/MovieRecommendationSystem")
+
+library(dplyr)
+library(reshape2)
+library(recommenderlab)
+library(ggplot2)

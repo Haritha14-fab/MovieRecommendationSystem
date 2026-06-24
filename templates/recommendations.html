@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1">
+
+    <title>
+        Movie Recommendations
+    </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/recommendation.css') }}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+        <a class="navbar-brand"
+           href="{{ url_for('home') }}">
+            🎬 Movie Recommendation System
+        </a>
+
+        <a href="{{ url_for('home') }}"
+           class="btn btn-outline-light">
+            Home
+        </a>
+
+    </div>
+
+</nav>
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">
+        Recommendations for:
+        <span class="text-primary">
+            {{ title }}
+        </span>
+    </h2>
+
+    <!-- Search -->
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="position-relative">
+
+                <input
+                    id="recSearch"
+                    class="form-control form-control-lg"
+                    placeholder="Search movie name..."
+                    autocomplete="off">
+
+                <div
+                    id="recSuggestions"
+                    class="list-group position-absolute w-100"
+                    style="z-index:1000;">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Loading -->
+    <div
+        id="loading"
+        class="text-center mt-5">
+
+        <div
+            class="spinner-border text-primary">
+        </div>
+
+        <p class="fw-bold text-primary">
+            🔍 Loading recommendations...
+        </p>
+
+    </div>
+
+    <!-- Cards -->
+    <div
+        id="cards"
+        class="row mt-5">
+    </div>
+
+</div>
+
+<script>
+const movieTitle =
+    `{{ title }}`;
+
+const cards =
+    document.getElementById(
+        "cards"
+    );
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+async function fetchRecs(){
+
+    loading.style.display =
+        "block";
+
+    cards.innerHTML =
+        "";
+
+    try{
+
+        const res =
+            await fetch(
+                `/api/recommend_ai?title=${encodeURIComponent(movieTitle)}`
+            );
+
+        const data =
+            await res.json();
+
+        loading.style.display =
+            "none";
+
+        if(
+            !data.results ||
+            data.results.length===0
+        ){
+
+            cards.innerHTML =
+                `
+                <div class="col-12 text-center">
+                    <h4>
+                        No recommendations found.
+                    </h4>
+                </div>
+                `;
+
+            return;
+        }
+
+        cards.innerHTML +=
+            `
+            <div class="col-12 mb-4">
+                <div class="alert alert-info">
+                    Recommendations for: 
+                    <strong>${movieTitle}</strong>
+                </div>
+            </div>
+            `;
+
+        for(const movie of data.results){
+
+            let poster =
+                "/static/images/no-poster.jpg";
+
+            try{
+
+                const posterRes =
+                    await fetch(
+                        `/api/poster?title=${encodeURIComponent(movie.title)}`
+                    );
+
+                const posterData =
+                    await posterRes.json();
+
+                if(posterData.url)
+                    poster =
+                        posterData.url;
+
+            }
+
+            catch(e){
+                console.log(e);
+            }
+
+            cards.innerHTML +=
+                `
+                <div
+                    class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+                    <div
+                        class="card shadow movie-card">
+
+                        <img
+                            src="${poster}"
+                            class="card-img-top movie-poster"
+                            alt="${movie.title}"
+                            onerror="
+                                this.src='/static/images/no-poster.jpg'
+                            ">
+
+                        <div class="card-body">
+
+                            <h5
+                                class="card-title">
+                                ${movie.title}
+                            </h5>
+
+                            <p class="text-muted">
+                                Score: ${
+                                    movie.score
+                                    ? Number(movie.score).toFixed(2)
+                                    : "N/A"
+                                }
+                            </p>
+
+                            <a
+                                href="/movie?title=${encodeURIComponent(movie.title)}"
+                                class="btn btn-primary w-100">
+                                View Details
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                `;
+        }
+
+    }
+
+    catch(error){
+
+        loading.style.display =
+            "none";
+
+        cards.innerHTML =
+            `
+            <div class="col-12 text-center">
+                <h4>
+                    Error loading recommendations.
+                </h4>
+            </div>
+            `;
+    }
+}
+
+fetchRecs();
+
+function debounce(fn, wait){
+
+    let t;
+
+    return function(...args){
+
+        clearTimeout(t);
+
+        t =
+            setTimeout(
+                ()=>fn.apply(this, args),
+                wait
+            );
+
+    }
+}
+
+const recSearch =
+    document.getElementById(
+        "recSearch"
+    );
+
+const recSuggestions =
+    document.getElementById(
+        "recSuggestions"
+    );
+
+recSearch.addEventListener(
+    "input",
+
+    debounce(
+        async function(){
+
+            const q =
+                this.value.trim();
+
+            if(!q){
+
+                recSuggestions.innerHTML =
+                    "";
+
+                return;
+            }
+
+            let j = { results: [] };
+
+            try{
+                const r =
+                    await fetch(
+                        `/api/title_suggest?q=${encodeURIComponent(q)}`
+                    );
+
+                j =
+                    await r.json();
+
+            } catch(e){
+                console.log(e);
+            }
+
+            recSuggestions.innerHTML =
+                "";
+
+            (j.results || []).forEach(
+
+                title =>{
+
+                    const item =
+                        document.createElement(
+                            "a"
+                        );
+
+                    item.className =
+                        "list-group-item list-group-item-action";
+
+                    item.innerText =
+                        title;
+
+                    item.onclick =
+                        () =>{
+
+                            window.location.href =
+                                `/recommendations?title=${encodeURIComponent(title)}`;
+
+                        };
+
+                    recSuggestions.appendChild(
+                        item
+                    );
+
+                }
+
+            );
+
+        },
+
+        300
+    )
+
+);
+
+recSearch.addEventListener(
+    "keypress",
+
+    function(e){
+
+        if(e.key === "Enter"){
+
+            const title =
+                this.value.trim();
+
+            if(title){
+
+                window.location.href =
+                    `/recommendations?title=${encodeURIComponent(title)}`;
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

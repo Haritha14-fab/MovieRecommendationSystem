@@ -1,0 +1,10 @@
+Flask>=2.0
+requests
+pandas
+numpy
+scikit-learn
+python-dotenv
+gunicorn
+
+# Optional: enable transformer embeddings with USE_TRANSFORMERS=1
+sentence-transformers
