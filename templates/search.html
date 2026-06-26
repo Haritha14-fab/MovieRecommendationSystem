@@ -29,7 +29,7 @@
 
         <a
             class="navbar-brand"
-            href="{{ url_for('home') }}">
+            href="{{ url_for('pages.home') }}">
 
             🎬 Movie Recommendation System
 
@@ -38,7 +38,7 @@
         <div>
 
             <a
-                href="{{ url_for('profile') }}"
+                href="{{ url_for('pages.profile') }}"
                 class="btn btn-info me-2">
 
                 Profile
@@ -46,7 +46,7 @@
             </a>
 
             <a
-                href="{{ url_for('logout') }}"
+                href="{{ url_for('auth.logout') }}"
                 class="btn btn-danger">
 
                 Logout
@@ -98,8 +98,7 @@
                     </h4>
 
                     <a
-                        href="{{ url_for('movie',
-                        title=movie.title) }}"
+                        href="{{ url_for('pages.movie_detail', title=movie.title) }}"
                         class="btn btn-primary">
 
                         View Details
