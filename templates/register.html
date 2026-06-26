@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1">
+          content="width=device-width, initial-scale=1.0">
 
     <title>Register | Movie Recommendation System</title>
 
@@ -34,14 +34,14 @@
 
                     <!-- Error Message -->
                     {% if error %}
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger" role="alert">
                         {{ error }}
                     </div>
                     {% endif %}
 
                     <!-- Success Message -->
                     {% if success %}
-                    <div class="alert alert-success">
+                    <div class="alert alert-success" role="alert">
                         {{ success }}
                     </div>
                     {% endif %}
@@ -52,11 +52,12 @@
 
                         <!-- Name -->
                         <div class="mb-3">
-                            <label class="form-label">
+                            <label for="username" class="form-label">
                                 Name
                             </label>
 
                             <input type="text"
+                                   id="username"
                                    name="username"
                                    class="form-control"
                                    placeholder="Enter your name"
@@ -65,10 +66,117 @@
 
                         <!-- Email -->
                         <div class="mb-3">
-                            <label class="form-label">
+                            <label for="email" class="form-label">
                                 Email
                             </label>
 
                             <input type="email"
+                                   id="email"
                                    name="email"
                                    class="form-control"
+                                   placeholder="Enter your email"
+                                   required>
+                        </div>
+
+                        <!-- Mobile (optional) -->
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">
+                                Mobile
+                            </label>
+
+                            <input type="tel"
+                                   id="mobile"
+                                   name="mobile"
+                                   class="form-control"
+                                   placeholder="Enter your mobile number">
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                Password
+                            </label>
+
+                            <div class="input-group">
+                                <input type="password"
+                                       id="password"
+                                       name="password"
+                                       class="form-control"
+                                       placeholder="Enter your password"
+                                       required>
+
+                                <button type="button"
+                                        class="btn btn-outline-secondary"
+                                        id="showPassword"
+                                        aria-label="Show password">
+                                    Show
+                                </button>
+                            </div>
+
+                            <!-- Password Strength Indicator -->
+                            <div class="progress mt-2">
+                                <div class="progress-bar"
+                                     id="strengthBar"
+                                     role="progressbar"
+                                     aria-valuenow="0"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+
+                            <small id="strengthText" class="form-text"></small>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-4">
+                            <label for="confirmPassword" class="form-label">
+                                Confirm Password
+                            </label>
+
+                            <input type="password"
+                                   id="confirmPassword"
+                                   name="confirm_password"
+                                   class="form-control"
+                                   placeholder="Re-enter your password"
+                                   required>
+
+                            <small id="matchMessage" class="form-text"></small>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit"
+                                    class="btn btn-primary btn-lg">
+                                Register
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <hr>
+
+                    <!-- Link to Login -->
+                    <div class="text-center">
+                        <p>
+                            Already have an account?
+                            <a href="{{ url_for('auth.login') }}">
+                                Login Here
+                            </a>
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Custom JavaScript -->
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
+</body>
+</html>
