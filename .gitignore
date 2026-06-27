@@ -7,3 +7,15 @@ __pycache__/
 *.pkl
 output/
 cache/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+*.rds
+*.pkl
+output/
+cache/
+.venv/
+venv/
