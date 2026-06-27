@@ -110,7 +110,7 @@
 
                 const res =
                     await fetch(
-                        `/api/recommend_ai?title=${encodeURIComponent(movieTitle)}`
+                        `/api/recommend?title=${encodeURIComponent(movieTitle)}&topn=12`
                     );
 
                 const data =
@@ -149,7 +149,7 @@
                 for (const movie of data.results) {
 
                     let poster =
-                        "/static/images/no-poster.jpg";
+                        "/static/images/no-poster.svg";
 
                     try {
 
@@ -184,7 +184,7 @@
                             class="card-img-top movie-poster"
                             alt="${movie.title}"
                             onerror="
-                                this.src='/static/images/no-poster.jpg'
+                                this.src='/static/images/no-poster.svg'
                             ">
 
                         <div class="card-body">

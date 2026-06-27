@@ -2,9 +2,10 @@ Flask>=2.0
 requests
 pandas
 numpy
-scikit-learn
+scikit-learn>=1.0.0,<2.0.0
 python-dotenv
 gunicorn
+Flask-WTF
 
 # Optional: enable transformer embeddings with USE_TRANSFORMERS=1
 sentence-transformers

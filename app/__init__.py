@@ -5,6 +5,7 @@ import os
 import secrets
 
 from flask import Flask
+from flask_wtf.csrf import CSRFProtect
 
 from config import Config
 from database.user_store import init_user_database
@@ -32,6 +33,10 @@ def create_app(config_class: type[Config] = Config) -> Flask:
         app.secret_key = config_class.SECRET_KEY
 
     app.permanent_session_lifetime = config_class.PERMANENT_SESSION_LIFETIME
+
+    # Initialize CSRF protection
+    csrf = CSRFProtect()
+    csrf.init_app(app)
 
     logging.basicConfig(
         level=logging.INFO,

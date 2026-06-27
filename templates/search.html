@@ -86,7 +86,7 @@
                     "
                     alt="{{ movie.title }}"
                     onerror="
-                    this.src='/static/images/no-poster.jpg';
+                    this.src='/static/images/no-poster.svg';
                     ">
 
                 <div class="card-body text-center">
@@ -153,7 +153,7 @@
                     "
                     alt="{{ rec.title }}"
                     onerror="
-                    this.src='/static/images/no-poster.jpg';
+                    this.src='/static/images/no-poster.svg';
                     ">
 
                 <div
@@ -175,7 +175,7 @@
                     {% endif %}
 
                     <a
-                        href="/movie/{{ movie.title|urlencode }}"
+                        href="{{ url_for('pages.movie_detail', title=rec.title) }}"
                         class="btn btn-success mt-auto">
 
                         View Movie
