@@ -17,12 +17,26 @@ def register():
     email = request.form["email"]
     mobile = request.form.get("mobile", "")
     password = request.form["password"]
+    confirm_password = request.form.get("confirm_password", "")
+
+    if not confirm_password:
+        return render_template(
+            "register.html",
+            error="Please confirm your password",
+        )
+
+    if password != confirm_password:
+        return render_template(
+            "register.html",
+            error="Passwords do not match",
+        )
 
     success, error_message = create_user(name, email, password, mobile)
     if not success:
         return render_template("register.html", error=error_message)
 
     return redirect(url_for("auth.login"))
+
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -39,7 +53,7 @@ def login():
     if not user:
         return render_template("login.html", error="Invalid login credentials")
 
-    session.permanent = remember_me or True
+    session.permanent = remember_me
     session["user"] = user
     return redirect(url_for("pages.home"))
 

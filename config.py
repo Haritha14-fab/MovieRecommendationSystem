@@ -5,7 +5,10 @@ from datetime import timedelta
 
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load .env but don't let malformed lines spam warnings / break startup.
+# If your .env is invalid, warnings are annoying; parsing errors should be non-fatal.
+load_dotenv(override=False, verbose=False, dotenv_path=None)
+
 
 
 class Config:

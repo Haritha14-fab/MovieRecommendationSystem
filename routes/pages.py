@@ -124,11 +124,14 @@ def movie_detail(title):
         "movie.html",
         title=resolved_title,
         poster=get_movie_poster(resolved_title),
+        placeholder_poster="/static/images/no-poster.svg",
         details=fetch_movie_details(resolved_title),
         trailer=f"https://www.youtube.com/results?search_query={resolved_title}+trailer",
         watch=f"https://www.youtube.com/results?search_query={resolved_title}+full+movie",
         recommendations=similar_movies,
     )
+
+
 
 
 @pages_bp.route("/movie")
