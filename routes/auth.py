@@ -39,7 +39,7 @@ def login():
     if not user:
         return render_template("login.html", error="Invalid login credentials")
 
-    session.permanent = remember_me or True
+    session.permanent = remember_me
     session["user"] = user
     return redirect(url_for("pages.home"))
 

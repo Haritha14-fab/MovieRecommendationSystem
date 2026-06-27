@@ -22,7 +22,7 @@ def init_user_database() -> None:
             """
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT UNIQUE,
+                name TEXT,
                 email TEXT UNIQUE,
                 password TEXT,
                 verified INTEGER DEFAULT 0,
