@@ -175,7 +175,7 @@
                     {% endif %}
 
                     <a
-                        href="/movie/{{ movie.title|urlencode }}"
+                        href="{{ url_for('pages.movie_detail', title=rec.title) }}"
                         class="btn btn-success mt-auto">
 
                         View Movie
